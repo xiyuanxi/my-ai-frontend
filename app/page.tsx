@@ -78,7 +78,7 @@ export default function Home() {
             className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
+              className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
                 msg.role === "user"
                   ? "bg-blue-500 text-white rounded-br-sm"
                   : "bg-white text-gray-800 shadow-sm border rounded-bl-sm"
