@@ -5,12 +5,13 @@ export interface ChatResponse {
 
 export async function sendMessage(
   message: string,
-  sessionId: string
+  sessionId: string,
+  model: string = "openai"
 ): Promise<ChatResponse> {
   const res = await fetch("/api/chat", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, session_id: sessionId }),
+    body: JSON.stringify({ message, session_id: sessionId, model }),
   });
   if (!res.ok) throw new Error(`API error: ${res.status}`);
   return res.json();
