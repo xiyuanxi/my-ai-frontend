@@ -15,6 +15,7 @@ export default function Home() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [sessionId, setSessionId] = useState("");
+  const [model, setModel] = useState("openai");
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function Home() {
     setLoading(true);
 
     try {
-      const data = await sendMessage(text, sessionId);
+      const data = await sendMessage(text, sessionId, model);
       setSessionId(data.session_id);
       setMessages((prev) => [
         ...prev,
@@ -120,23 +121,42 @@ export default function Home() {
 
       {/* Input */}
       <div className="px-4 py-4 bg-white border-t">
-        <div className="flex gap-2 max-w-3xl mx-auto">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
-            placeholder="输入问题，按 Enter 发送..."
-            disabled={loading}
-            className="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100"
-          />
-          <button
-            onClick={handleSend}
-            disabled={loading || !input.trim()}
-            className="rounded-xl bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white px-5 py-2.5 text-sm font-medium transition-colors"
-          >
-            发送
-          </button>
+        <div className="flex flex-col gap-2 max-w-3xl mx-auto">
+          {/* Model toggle */}
+          <div className="flex gap-1">
+            {["openai", "gemini"].map((m) => (
+              <button
+                key={m}
+                onClick={() => setModel(m)}
+                className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${
+                  model === m
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                }`}
+              >
+                {m === "openai" ? "OpenAI" : "Gemini"}
+              </button>
+            ))}
+          </div>
+          {/* Input row */}
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && handleSend()}
+              placeholder="输入问题，按 Enter 发送..."
+              disabled={loading}
+              className="flex-1 rounded-xl border border-gray-300 px-4 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-100"
+            />
+            <button
+              onClick={handleSend}
+              disabled={loading || !input.trim()}
+              className="rounded-xl bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white px-5 py-2.5 text-sm font-medium transition-colors"
+            >
+              发送
+            </button>
+          </div>
         </div>
       </div>
     </div>
